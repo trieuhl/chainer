@@ -315,6 +315,19 @@ class Trainer(object):
                 traceback.print_tb(sys.exc_info()[2])
                 f.write('Will finalize trainer extensions and updater before '
                         'reraising the exception.\n')
+            for _, entry in extensions:
+                handler = getattr(entry.extension, 'on_error', None)
+                if handler:
+                    try:
+                        # It is guaranteed all handlers are called,
+                        # but exceptions thrown by those handlers are
+                        # just printed and ignored, as well as its
+                        # return values.
+                        handler(self, e, sys.exc_info()[2])
+                    except Exception as he:
+                        f.write('Exception in error handler: {}\n'.format(he))
+                        traceback.print_tb(sys.exc_info()[2])
+                        f.write('Traceback (most recent call last):\n')
             six.reraise(*sys.exc_info())
         finally:
             for _, entry in extensions:
