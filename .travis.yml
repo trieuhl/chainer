@@ -47,7 +47,7 @@ before_install:
 
       brew cask uninstall oclint;
       brew install hdf5;
-      brew install open-mpi
+      brew install open-mpi;
     fi
 
 install:
