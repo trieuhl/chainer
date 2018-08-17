@@ -51,6 +51,8 @@ before_install:
     fi
 
 install:
+  - which mpiexec
+  - ls /usr/bin/mpi*
   - pip install -U pip wheel
   - pip install mpi4py
   - python setup.py sdist
